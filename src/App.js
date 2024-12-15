@@ -2,6 +2,8 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
+import Login from './components/Login';
+import Logout from './components/Logout';
 import CreateAccount from './components/CreateAccount';
 import Deposit from './components/Deposit';
 import Withdraw from './components/Withdraw';
@@ -19,6 +21,8 @@ function App() {
           <Route path="/deposit" element={<Deposit />} />
           <Route path="/withdraw" element={<Withdraw />} />
           <Route path="/all-data" element={<AllData />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
         </Routes>
       </div>
     </UserProvider>

@@ -1,57 +1,59 @@
 import React, { useState, useContext } from 'react';
 import { UserContext } from '../context/UserContext';
-import { Card, Button, Form, Alert } from 'react-bootstrap';
 
 function Withdraw() {
-  const { balance, setBalance } = useContext(UserContext);
+  const { currentUser, updateUserBalance } = useContext(UserContext);
   const [amount, setAmount] = useState('');
-  const [success, setSuccess] = useState(false);
+  const [warning, setWarning] = useState('');
+
+  if (!currentUser) {
+    return (
+      <div className="alert alert-danger">
+        You must <strong>create an account</strong>. If you already have one, <strong>log in</strong>.
+      </div>
+    );
+  }
 
   const handleWithdraw = () => {
-    const withdrawAmount = parseFloat(amount);
-    if (isNaN(withdrawAmount)) {
-      alert('Please enter a valid number.');
-      return;
-    }
-    if (withdrawAmount <= 0) {
-      alert('Withdraw amount must be greater than zero.');
-      return;
-    }
-    if (withdrawAmount > balance) {
-      alert('Insufficient funds.');
+    const numericAmount = parseFloat(amount);
+
+    if (numericAmount <= 0) {
+      setWarning('Amount must be greater than zero.');
       return;
     }
 
-    setBalance(balance - withdrawAmount);
+    if (numericAmount > currentUser.balance) {
+      setWarning('Insufficient funds. Please enter a valid amount.');
+      return;
+    }
+
+    updateUserBalance(currentUser.email, -numericAmount); // Deduct the amount
+    setWarning('');
+    alert(`$${numericAmount} has been withdrawn from your account.`);
     setAmount('');
-    setSuccess(true);
   };
 
   return (
-    <Card>
-      <Card.Body>
-        <Card.Title>Withdraw</Card.Title>
-        <Card.Text>Balance: ${balance.toFixed(2)}</Card.Text>
-        {success && <Alert variant="success">Withdraw successful!</Alert>}
-        <Form>
-          <Form.Group>
-            <Form.Label>Withdraw Amount</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-            />
-          </Form.Group>
-          <Button
-            disabled={!amount}
-            onClick={handleWithdraw}
-          >
-            Withdraw
-          </Button>
-        </Form>
-      </Card.Body>
-    </Card>
+    <div className="card">
+      <div className="card-header">
+        Withdraw (Current Balance: ${currentUser.balance})
+      </div>
+      <div className="card-body">
+        <div className="mb-3">
+          <label>Amount</label>
+          <input
+            type="number"
+            className="form-control"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+          />
+        </div>
+        {warning && <div className="text-danger mb-3">{warning}</div>}
+        <button className="btn btn-danger" onClick={handleWithdraw}>
+          Withdraw
+        </button>
+      </div>
+    </div>
   );
 }
 

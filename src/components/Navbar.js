@@ -11,9 +11,12 @@ function Navbar() {
         <Nav>
           <Nav.Link as={NavLink} to="/">Home</Nav.Link>
           <Nav.Link as={NavLink} to="/create-account">Create Account</Nav.Link>
+          <Nav.Link as={NavLink} to="/login">Login</Nav.Link>
+          <Nav.Link as={NavLink} to="/logout">Logout</Nav.Link>
           <Nav.Link as={NavLink} to="/deposit">Deposit</Nav.Link>
           <Nav.Link as={NavLink} to="/withdraw">Withdraw</Nav.Link>
           <Nav.Link as={NavLink} to="/all-data">All Data</Nav.Link>
+          
         </Nav>
       </BootstrapNavbar.Collapse>
     </BootstrapNavbar>
