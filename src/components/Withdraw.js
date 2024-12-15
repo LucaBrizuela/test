@@ -49,7 +49,7 @@ function Withdraw() {
           />
         </div>
         {warning && <div className="text-danger mb-3">{warning}</div>}
-        <button className="btn btn-danger" onClick={handleWithdraw}>
+        <button className="btn btn-danger" onClick={handleWithdraw} value={amount} disabled={!amount.trim()}> 
           Withdraw
         </button>
       </div>

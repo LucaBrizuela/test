@@ -44,7 +44,7 @@ function Deposit() {
           />
         </div>
         {warning && <div className="text-danger mb-3">{warning}</div>}
-        <button className="btn btn-success" onClick={handleDeposit}>
+        <button className="btn btn-success" onClick={handleDeposit} value={amount} disabled={!amount.trim()}> 
           Deposit
         </button>
       </div>
