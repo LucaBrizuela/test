@@ -9,7 +9,7 @@ function CreateAccount() {
   const [password, setPassword] = useState('');
   const [success, setSuccess] = useState(false);
   const [errors, setErrors] = useState({});
-  const [isTouched, setIsTouched] = useState(false); // Tracks if user has typed anything
+  const [isTouched, setIsTouched] = useState(false); // Tracks if any input field has been touched
 
   const validateInputs = () => {
     const newErrors = {};
@@ -31,6 +31,16 @@ function CreateAccount() {
     return newErrors;
   };
 
+  const handleInputChange = (value, setter) => {
+    setter(value);
+    if (!isTouched) {
+      setIsTouched(true); // Enable the Submit button after the first input
+    }
+    if (!name && !email && !password && value.trim() === '') {
+      setIsTouched(false); // Disable if all inputs are cleared
+    }
+  };
+
   const handleSubmit = () => {
     const validationErrors = validateInputs();
     if (Object.keys(validationErrors).length > 0) {
@@ -44,12 +54,7 @@ function CreateAccount() {
     setPassword('');
     setErrors({});
     setSuccess(true);
-  };
-
-  // Handle input change and track if anything is typed
-  const handleInputChange = (e, setFieldValue) => {
-    setFieldValue(e.target.value);
-    setIsTouched(true); // Mark form as touched when user types
+    setIsTouched(false); // Reset Submit button to disabled after successful submission
   };
 
   return (
@@ -64,7 +69,7 @@ function CreateAccount() {
               type="text"
               placeholder="Enter name"
               value={name}
-              onChange={(e) => handleInputChange(e, setName)}
+              onChange={(e) => handleInputChange(e.target.value, setName)}
               isInvalid={!!errors.name}
             />
             <Form.Control.Feedback type="invalid">{errors.name}</Form.Control.Feedback>
@@ -75,7 +80,7 @@ function CreateAccount() {
               type="email"
               placeholder="Enter email"
               value={email}
-              onChange={(e) => handleInputChange(e, setEmail)}
+              onChange={(e) => handleInputChange(e.target.value, setEmail)}
               isInvalid={!!errors.email}
             />
             <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
@@ -86,14 +91,14 @@ function CreateAccount() {
               type="password"
               placeholder="Enter password"
               value={password}
-              onChange={(e) => handleInputChange(e, setPassword)}
+              onChange={(e) => handleInputChange(e.target.value, setPassword)}
               isInvalid={!!errors.password}
             />
             <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
           </Form.Group>
           <Button
             onClick={handleSubmit}
-            disabled={!isTouched || !name || !email || password.length < 8} // Disabled if nothing typed or inputs are empty/invalid
+            disabled={!isTouched} // Initially disabled, enabled after typing, disabled again if cleared
           >
             Create Account
           </Button>
